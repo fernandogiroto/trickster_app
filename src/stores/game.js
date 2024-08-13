@@ -4,8 +4,9 @@ import { ref } from 'vue';
 export const useGameStore = defineStore('game', () => {
   const users = ref([]);
 
-  function addUser(username) {
-    users.value.push({ username });
+  function addUser(username, test) {
+    users.value.push(
+      { username,  test});
     saveUsersToLocalStorage();
   }
 

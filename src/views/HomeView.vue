@@ -1,5 +1,9 @@
 
 <template>
+  <video autoplay muted playsinline>
+      <source src="@/assets/videos/trickster.mov" type="video/mp4">
+      Seu navegador não suporta o elemento de vídeo.
+    </video>
   Artista Impostor
   <input type="text"  v-model="username">
   <button @click="addUser(username)">Adicionar Usuário</button>
@@ -22,7 +26,7 @@
 
   const addUser = () => {
     if (username.value) {
-      store.addUser(username.value);
+      store.addUser(username.value, 'impostor');
       username.value = '';
     }
   };
