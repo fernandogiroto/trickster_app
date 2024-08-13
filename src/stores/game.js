@@ -4,9 +4,28 @@ import { ref } from 'vue';
 export const useGameStore = defineStore('game', () => {
   const users = ref([]);
 
-  function addUser(username, test) {
+  function addUser(username) {
     users.value.push(
-      { username,  test});
+      { username,  word: ''});
+    saveUsersToLocalStorage();
+  }
+
+  function updateUserWord(word) {
+    if (users.value.length === 0) return;
+
+    // Choose a random user to be the impostor.
+    const impostorIndex = Math.floor(Math.random() * users.value.length);
+
+    // Update all users with the word.
+    users.value.forEach((user, index) => {
+      if (index === impostorIndex) {
+        user.word = 'impostor';
+      }
+      else {
+        user.word = word;
+      }
+    });
+
     saveUsersToLocalStorage();
   }
 
@@ -36,6 +55,7 @@ export const useGameStore = defineStore('game', () => {
   return {
     users,
     addUser,
+    updateUserWord,
     removeUser,
     clearUsers
   };
