@@ -20,6 +20,8 @@
     "@vitejs/plugin-vue-jsx": "^4.0.0",
     "@vue/test-utils": "^2.4.6",
     "jsdom": "^24.1.0",
+    "sass": "^1.77.8",
+    "sass-loader": "^16.0.0",
     "vite": "^5.3.1",
     "vite-plugin-vue-devtools": "^7.3.1",
     "vitest": "^1.6.0"
