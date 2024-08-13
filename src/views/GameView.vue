@@ -11,6 +11,7 @@
     </div>
     <div v-else>
       <p>Todos os utilizadores foram exibidos.</p>
+      <button @click="refreshGame">Sortear Novamente</button>
     </div>
   </div>
 </template>
@@ -32,6 +33,13 @@
         showWord.value = false;
         currentIndex.value++;
     }
+
+    const refreshGame = () => {
+        currentIndex.value = 0; 
+        const randomIndex = Math.floor(Math.random() * words.length);
+        store.updateUserWord(words[randomIndex]); 
+        showWord.value = false;
+    };
 
     onMounted(() => {
         const randomIndex = Math.floor(Math.random() * words.length);
