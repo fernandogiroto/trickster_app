@@ -26,7 +26,7 @@
 
   const addUser = () => {
     if (username.value) {
-      store.addUser(username.value, 'impostor');
+      store.addUser(username.value, '');
       username.value = '';
     }
   };
