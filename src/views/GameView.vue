@@ -13,6 +13,7 @@
       <p>Todos os utilizadores foram exibidos.</p>
       <button @click="refreshGame">Sortear Novamente</button>
     </div>
+    <button @click="backHome">Voltar</button>
   </div>
 </template>
   
@@ -22,12 +23,17 @@
     import {onMounted, computed, ref} from 'vue';
     import { useGameStore } from '@/stores/game';
     import wordData from '@/utils/words';
+    import router from '@/router';
 
     const store = useGameStore();
     const words = wordData.words;
     const currentIndex = ref(0);
     const showWord = ref(false);
     const currentUser = computed(() => store.users[currentIndex.value]);
+
+    const backHome = () => {
+      router.push({name:'home'})
+    }
 
     const nextUser = () => {
         showWord.value = false;
