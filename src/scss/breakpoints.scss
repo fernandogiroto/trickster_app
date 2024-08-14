@@ -1,0 +1,78 @@
+@import '@/scss/variables';
+
+@mixin breakpoint($minbreakpoint, $maxbreakpoint, $direction:'max') {
+
+  @if $direction == 'max' {
+    @media (min-width: $minbreakpoint) and (max-width: $maxbreakpoint) {
+      @content;
+    }
+  }@else if $direction == 'xl'{
+    @media (min-width: $minbreakpoint) {
+      @content;
+    }
+  }
+  @else{
+    @media (max-width: $maxbreakpoint) {
+      @content;
+    }
+  }
+}
+
+@for $i from 1 through $columns {
+  .col-sm-#{$i} {
+    @include breakpoint('0px', $sm-breakpoint,'min') {
+      flex: 0 0 calc(100% * #{$i} / #{$columns});
+      max-width: calc(100% * #{$i} / #{$columns});
+    }
+  }
+  .col-md-#{$i} {
+    @include breakpoint($sm-breakpoint + 1px, $md-breakpoint) {
+      flex: 0 0 calc(100% * #{$i} / #{$columns});
+      max-width: calc(100% * #{$i} / #{$columns});
+    }
+  }
+  .col-lg-#{$i} {
+    @include breakpoint($md-breakpoint + 1px,$lg-breakpoint) {
+      flex: 0 0 calc(100% * #{$i} / #{$columns});
+      max-width: calc(100% * #{$i} / #{$columns});
+    }
+  }
+  .col-xl-#{$i} {
+    @include breakpoint($lg-breakpoint + 1px, $xl-breakpoint,'xl') {
+      flex: 0 0 calc(100% * #{$i} / #{$columns});
+      max-width: calc(100% * #{$i} / #{$columns});
+    }
+  }
+
+  .col-#{$i} {
+    @include breakpoint('0px', $sm-breakpoint,'min') {
+      flex: 0 0 calc(100% * #{$i} / #{$columns});
+      max-width: calc(100% * #{$i} / #{$columns});
+    }
+    @include breakpoint($sm-breakpoint + 1px, $md-breakpoint) {
+      flex: 0 0 calc(100% * #{$i} / #{$columns});
+      max-width: calc(100% * #{$i} / #{$columns});
+    }
+    @include breakpoint($md-breakpoint + 1px,$lg-breakpoint) {
+      flex: 0 0 calc(100% * #{$i} / #{$columns});
+      max-width: calc(100% * #{$i} / #{$columns});
+    }
+    @include breakpoint($lg-breakpoint + 1px, $xl-breakpoint,'xl') {
+      flex: 0 0 calc(100% * #{$i} / #{$columns});
+      max-width: calc(100% * #{$i} / #{$columns});
+    }
+  }
+}
+
+
+.row {
+  @include flexbox(row, flex-start, initial);
+  flex-wrap: wrap;
+  // margin-right: calc(-1 * #{$gutter} / 2);
+  // margin-left: calc(-1 * #{$gutter} / 2);
+  > * {
+    box-sizing: border-box;
+    padding: calc(#{$gutter} / 2);
+    overflow: hidden;
+  }
+}

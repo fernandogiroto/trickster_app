@@ -1,6 +1,6 @@
 
 <template>
-    <div>
+    <div class="game-view">
     <div v-if="currentUser">
       <h2>{{ currentUser.username }}</h2>
 

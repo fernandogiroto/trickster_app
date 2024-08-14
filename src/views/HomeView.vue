@@ -1,35 +1,40 @@
 <template>
-  <div class="trickster-video">
-    <video autoplay muted playsinline loop>
-      <source src="@/assets/videos/trickster.mov" type="video/mp4">
-      Seu navegador não suporta o elemento de vídeo.
-    </video>
-    <AnimatedText title="O IMPOSTOR"/>
-  </div>
-  <div class="game-start">
-    <input type="text"  v-model="username">
-    <button @click="addUser(username)">Adicionar Usuário</button>
-    <button @click="newGame()">Começar Jogo</button>
-
-    <div class="users">
-      <h3>Lista de jogadores:</h3>
-      <ul>
-        <li v-for="user in store.users">
-          {{  user.username }}
-          <button @click="removeUser(user.username)">Remover</button>
-        </li>
-      </ul>
-
-      <button @click="clearUsers()">Remover todos os jogadores</button>
+  <div class="home-view">
+    <div class="home-view__video">
+      <TricksterLogo height="400px" />
+    </div>
+    <div class="game-start">
+      <div class="game-start__add-user">
+        <input type="text" class="input" v-model="username" />
+        <Button background="button-outline__dark" width="85%" height="40px" @click="addUser(username)">ADICIONAR</Button>
+      </div>
+      <Button background="button__dark" @click="newGame()">COMEÇAR O JOGO</Button>
+      <div class="game-start__users">
+        <span class="game-start__users--title">Lista de Jogadores:</span>
+        <TransitionGroup name="list" tag="ul" class="game-users">
+          <li class="game-users__list" v-for="(user,index) in store.users" :key="user">
+            <div class="game-users__list--player">
+              <span>#0{{index+1}}</span>
+              <div class="color-circle" :style="{ backgroundColor: gerarCorHexadecimal() }"></div>
+              <span>{{ user.username }} </span>
+            </div>
+            <IconTrash class="pointer" size="20" color="var(--error-70)" @click="removeUser(user.username)"/>
+          </li>
+        </TransitionGroup>
+      </div>
     </div>
   </div>
+
 </template>
 
 <script setup>
 
   import {ref} from 'vue';
   import { useGameStore } from '@/stores/game';
-  import AnimatedText from '@/components/AnimatedText.vue';
+  import TricksterLogo from '@/components/TricksterLogo.vue';
+  import Button from '@/components/Button.vue';
+
+  import { IconTrash } from '@tabler/icons-vue';
   import router from '@/router';
   const store = useGameStore();
 
@@ -37,7 +42,7 @@
 
   const newGame = () => {
     router.push({name:'game'})
-};
+  };
 
   const addUser = () => {
     if (username.value) {
@@ -50,8 +55,9 @@
     store.removeUser(name);
   }
 
-  const clearUsers = () => {
-    store.clearUsers();
+  function gerarCorHexadecimal() {
+    let cor = '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
+    return cor;
   }
  
 </script>
@@ -60,20 +66,68 @@
 
   @import '@/scss/mixings';
 
-  .trickster-video {
-    @include flexbox(column,initial,initial);
+  .home-view{
+    @include flexbox(column,center,center);
     width: 100%; 
     height: 100%; 
     overflow: hidden; 
-    position: relative; 
+    position: relative;
+    &__video{
+      width: 100%;
+      @include flexbox(column,initial,initial);
+    }
   }
 
-  video {
-    top: 0; 
-    left: 0; 
-    width: 100%; 
-    height: 100%;
-    object-fit: cover; 
+  .game-start{
+    @include flexbox(column,space-between,initial);
+    gap: 10px;
+    width: 345px;
+    &__users{
+      @include flexbox(column,space-between,initial);
+      gap: 15px;
+      border: 1px solid;
+      padding: 10px;
+      border-radius: 5px;
+      box-shadow: 3px 2px 11px 10px rgb(90 77 77 / 16%);
+      &--title{
+        border-bottom: 1px solid;
+    padding: 0px 00px 10px 0px;
+      }
+    }
+    &__add-user{
+      @include flexbox(row,initial,initial);
+      width: 100%;
+      gap: 10px;
+    }
+  }
+
+  .game-users{
+    @include flexbox(column,space-between,initial);
+    gap: 10px;
+    &__list{
+      @include flexbox(row,space-between,center);
+      &--player{
+        @include flexbox(row,space-between,center);
+        gap: 5px;
+      }
+    }
+  }
+
+  input{
+    border-radius: 8px;
+    padding: 10px;
+    width: 100%;
+    &:focus {
+      border-color: 000; 
+      outline: none; 
+    }
+  }
+
+  .color-circle {
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
+    border: 1px solid #000; 
   }
 
 </style>

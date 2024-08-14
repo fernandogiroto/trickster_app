@@ -1,0 +1,140 @@
+// VARIABLES
+
+/* Colors */
+
+$transparent: transparent;
+
+$colors-palette: (
+  neutral-00: #c7c6c6,
+  neutral-10: #f6f6f6,
+  neutral-20: #d6d6d6,
+  neutral-40: #adadad,
+  neutral-30: #c2c2c2,
+  neutral-50: #999999,
+  neutral-60: #858585,
+  neutral-70: #5c5c5c,
+  neutral-80: #353535,
+  neutral-90: #232323,
+  error-10: #fff1f0,
+  error-20: #ffccc7,
+  error-70: #b22535,
+  success-10: #d4edda,
+  success-20: #155724
+);
+
+/* Fonts */
+
+$base-font-size: 1rem;
+
+$font-weights: (
+  lighter: 300,
+  normal: 400,
+  regular: 500,
+  medium: 600,
+  bold: 700,
+  bolder: 900
+);
+
+$font-sizes: (
+  x-small: 0.75rem,
+  small: 0.875rem,
+  normal: 1rem,
+  large: 1.25rem,
+  x-large: 1.5rem
+);
+
+$sizes: (
+  1: 1vw,
+  2: 2vw,
+  3: 3vw,
+  4: 4vw,
+  5: 5vw,
+  6: 6vw
+);
+
+/* Breakpoints */
+
+$sm-breakpoint: 576px;
+$md-breakpoint: 768px;
+$lg-breakpoint: 992px;
+$xl-breakpoint: 1200px;
+
+$breakpoints: (
+  'sm': $sm-breakpoint,
+  'md': $md-breakpoint,
+  'lg': $lg-breakpoint,
+  'xl': $xl-breakpoint
+);
+
+$columns: 12;
+$gutter: 20px;
+
+/* Spacings */
+
+$spacing-values: (
+  0: 0,
+  1: 0.25rem,
+  2: 0.5rem,
+  3: 1rem,
+  4: 1.5rem,
+  5: 3rem
+);
+
+/* Themes */
+
+$light: (
+  colors: (
+    primary: #019df4,
+    secondary: #86888c,
+    tertiary: #31c157,
+    theme: #ffffff,
+    reverse: #000000,
+    dark: #000000,
+    light: #ffffff,
+    text: #000000,
+    disabled:#F6F6F6
+  )
+);
+
+$dark: (
+  colors: (
+    primary: #019df4,
+    secondary: #86888c,
+    tertiary: #31c157,
+    theme: #ffffff,
+    reverse: #000000,
+    dark: #000000,
+    light: #ffffff,
+    text: #000000,
+    disabled:#F6F6F6
+  )
+);
+
+/* Mixings Styles */
+
+@mixin font-weight-variables($fonts, $prefix) {
+  @each $name, $value in $fonts {
+    $varName: '#{$prefix}-#{$name}';
+    --#{$varName}: #{$value};
+  }
+}
+
+@mixin font-size-variables($fonts, $prefix) {
+  @each $name, $value in $fonts {
+    $varName: '#{$prefix}-#{$name}';
+    --#{$varName}: #{$value};
+  }
+}
+
+@mixin color-variables($theme, $prefix) {
+  @each $key, $value in $theme {
+    $varName: '#{$key}-color';
+    --#{$varName}: #{$value};
+  }
+}
+
+@mixin color-pallete($colors) {
+  @each $key, $value in $colors {
+    --#{$key}: #{$value};
+  }
+}

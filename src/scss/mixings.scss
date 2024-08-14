@@ -1,6 +1,16 @@
-@mixin flexbox ($flexDirection: row, $justifyContent: initial, $alignContent:initial){
-    display: flex;
-    flex-direction: $flexDirection;
-    justify-content: $justifyContent;
-    align-content: $alignContent;
+@import '@/scss/variables';
+
+/* FLEXBOX */
+@mixin flexbox($flexDirection: row, $justifyContent: initial, $alignItems: initial) {
+  display: flex;
+  flex-direction: $flexDirection;
+  justify-content: $justifyContent;
+  align-items: $alignItems;
 }
+
+@mixin sm-breakpoint($padding: 0 10px) {
+  @media (max-width: $sm-breakpoint) {
+    padding:$padding;
+  }
+}
+
