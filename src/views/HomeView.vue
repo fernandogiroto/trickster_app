@@ -10,6 +10,18 @@
     <input type="text"  v-model="username">
     <button @click="addUser(username)">Adicionar Usuário</button>
     <button @click="newGame()">Começar Jogo</button>
+
+    <div class="users">
+      <h3>Lista de jogadores:</h3>
+      <ul>
+        <li v-for="user in store.users">
+          {{  user.username }}
+          <button @click="removeUser(user.username)">Remover</button>
+        </li>
+      </ul>
+
+      <button @click="clearUsers()">Remover todos os jogadores</button>
+    </div>
   </div>
 </template>
 
@@ -29,10 +41,18 @@
 
   const addUser = () => {
     if (username.value) {
-      store.addUser(username.value, '');
+      store.addUser(username.value);
       username.value = '';
     }
   };
+
+  const removeUser = (name) => {
+    store.removeUser(name);
+  }
+
+  const clearUsers = () => {
+    store.clearUsers();
+  }
  
 </script>
 
