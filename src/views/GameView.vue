@@ -11,6 +11,7 @@
     </div>
     <div v-else>
       <p>Todos os utilizadores foram exibidos.</p>
+      <button>Começar o jogo</button>
       <button @click="refreshGame">Sortear Novamente</button>
     </div>
     <button @click="backHome">Voltar</button>
