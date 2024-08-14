@@ -7,6 +7,7 @@ pinia.use(piniaPersistedState)
 
 import App from './App.vue'
 import router from './router'
+import './serviceWorker.js'
 
 const app = createApp(App)
 

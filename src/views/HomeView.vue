@@ -1,27 +1,28 @@
 <template>
   <div class="home-view">
     <div class="home-view__video">
-      <TricksterLogo height="400px" />
+      <TricksterLogo height="225px" />
     </div>
     <div class="game-start">
       <div class="game-start__add-user">
-        <input type="text" class="input" v-model="username" />
+        <input type="text" class="input" v-model="username" placeholder="Nome do Jogador" />
         <Button background="button-outline__dark" width="85%" height="40px" @click="addUser(username)">ADICIONAR</Button>
       </div>
       <Button background="button__dark" @click="newGame()">COMEÇAR O JOGO</Button>
-      <div class="game-start__users">
-        <span class="game-start__users--title">Lista de Jogadores:</span>
-        <TransitionGroup name="list" tag="ul" class="game-users">
-          <li class="game-users__list" v-for="(user,index) in store.users" :key="user">
-            <div class="game-users__list--player">
-              <span>#0{{index+1}}</span>
-              <div class="color-circle" :style="{ backgroundColor: gerarCorHexadecimal() }"></div>
-              <span>{{ user.username }} </span>
-            </div>
-            <IconTrash class="pointer" size="20" color="var(--error-70)" @click="removeUser(user.username)"/>
-          </li>
-        </TransitionGroup>
-      </div>
+        <span class="game-start__title">JOGADORES:</span>
+        <div class="game-start__users">
+          <TransitionGroup name="list" tag="ul" class="game-users">
+            <li class="game-users__list" v-for="(user,index) in store.users" :key="user">
+              <div class="game-users__list--player">
+                <span>#0{{index+1}}</span>
+                <div class="color-circle" :style="{ backgroundColor: gerarCorHexadecimal() }"></div>
+                <span>{{ user.username }} </span>
+              </div>
+              <IconTrash class="pointer" size="20" color="var(--error-70)" @click="removeUser(user.username)"/>
+            </li>
+          </TransitionGroup>
+        </div>
+     
     </div>
   </div>
 
@@ -80,7 +81,7 @@
 
   .game-start{
     @include flexbox(column,space-between,initial);
-    gap: 10px;
+    gap: 15px;
     width: 345px;
     &__users{
       @include flexbox(column,space-between,initial);
@@ -89,10 +90,17 @@
       padding: 10px;
       border-radius: 5px;
       box-shadow: 3px 2px 11px 10px rgb(90 77 77 / 16%);
-      &--title{
-        border-bottom: 1px solid;
-    padding: 0px 00px 10px 0px;
+      height: 200px;
+      overflow-y: scroll;
+      overflow-x: hidden; 
+      scrollbar-width: none; 
+      -ms-overflow-style: none; 
+      &::-webkit-scrollbar {
+        display: none; 
       }
+    }
+    &__title{
+      padding-top: 10px
     }
     &__add-user{
       @include flexbox(row,initial,initial);
