@@ -4,7 +4,7 @@
     <div class="game-view__user" v-if="currentUser">
       <h2>{{ currentUser.username }}</h2>
       <p v-if="showWord">{{ currentUser.word }}</p>
-      <button v-if="!showWord" @click="showWord = true">Mostrar Palavra</button>
+      <button class="button button__dark"  v-if="!showWord" @click="showWord = true">Mostrar Palavra</button>
       <button v-if="showWord" @click="nextUser">Esconder Palavra e Próximo</button>
     </div>
     <div v-else>
@@ -80,9 +80,13 @@
 
   .game-view{
     @include flexbox(column,center,center);
-    width: 100%; 
     height: 100%; 
     overflow: hidden; 
+    overflow: hidden;
+    margin: 15px;
+    border: 5px double #000;
+    box-shadow: 3px 2px 11px 10px rgb(90 77 77 / 16%);
+    border-radius: 10px;
     &__user{
       padding: 20px;
     }
