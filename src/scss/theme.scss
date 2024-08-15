@@ -94,6 +94,7 @@ ul {
 
 .pointer {
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .backdrop {
@@ -171,6 +172,10 @@ ul {
     padding-top: map-get($spacing-values, $i);
     padding-bottom: map-get($spacing-values, $i);
   }
+}
+
+button, input, textarea, select a {
+  -webkit-tap-highlight-color: transparent;
 }
 
 // COMPONENTS

@@ -27,6 +27,7 @@
 		width: v-bind(width); 
 		height: v-bind(height); 
 		object-fit: contain; 
+		border: 5px solid #FFF;
 	}
 
 </style>
