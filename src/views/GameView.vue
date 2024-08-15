@@ -31,6 +31,24 @@
     const currentIndex = ref(0);
     const showWord = ref(false);
     const currentUser = computed(() => store.users[currentIndex.value]);
+    const lastIndex = ref([]);
+
+    const getRandomIndexExcludingLast = () => {
+      let randomIndex;
+
+      do {
+        randomIndex = Math.floor(Math.random() * words.length);
+      } 
+      while (lastIndex.value.includes(randomIndex));
+
+      lastIndex.value.push(randomIndex);
+
+      if (lastIndex.value.length > 10) {
+        lastIndex.value.shift();
+      }
+
+      return randomIndex;
+    }
 
     const backHome = () => {
       router.push({name:'home'})
@@ -43,13 +61,13 @@
 
     const refreshGame = () => {
         currentIndex.value = 0; 
-        const randomIndex = Math.floor(Math.random() * words.length);
+        const randomIndex = getRandomIndexExcludingLast();
         store.updateUserWord(words[randomIndex]); 
         showWord.value = false;
     };
 
     onMounted(() => {
-        const randomIndex = Math.floor(Math.random() * words.length);
+        const randomIndex = getRandomIndexExcludingLast();
         store.updateUserWord(words[randomIndex]);
     })
 
