@@ -55,6 +55,7 @@
     }
 
     const goToGame = () => {
+      returnPage.value = false;
       router.push({name:'game'})
     }
 

@@ -13,6 +13,9 @@
         </audio>
       </div>
     </transition>
+    <div v-if="!showIntro">
+      CANVAS
+    </div>
   </div>
 </template>
 
