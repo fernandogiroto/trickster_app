@@ -175,6 +175,15 @@
   transform: translateX(30px);
 }
 
+
+.game-enter-active, .game-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.game-enter, .game-leave-to {
+  opacity: 0;
+}
+
 /* EFFECTS */
 
 .bottom-to-top--effect {

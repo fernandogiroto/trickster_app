@@ -1,7 +1,11 @@
 <template>
   <div class="home-view">
     <div class="home-view__video">
-      <TricksterLogo height="180px" />
+      <TricksterLogo height="180px">
+        <template #video>
+          <source src="@/assets/videos/trickster.mov" type="video/mp4">
+        </template>
+      </TricksterLogo>
     </div>
     <div class="game-start">
       <div class="game-start__add-user">
@@ -43,7 +47,7 @@
   const username = ref('');
 
   const newGame = () => {
-    router.push({name:'game'})
+    router.push({name:'players'})
   };
 
   const addUser = () => {

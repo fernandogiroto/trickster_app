@@ -1,97 +1,64 @@
-
 <template>
-    <div class="game-view"  :style="{ backgroundColor: userColor }">
-    <div class="game-view__user" v-if="currentUser">
-      <h2>{{ currentUser.username }}</h2>
-      <p v-if="showWord">{{ currentUser.word }}</p>
-      <button class="button button__dark"  v-if="!showWord" @click="showWord = true">Mostrar Palavra</button>
-      <button v-if="showWord" @click="nextUser">Esconder Palavra e Próximo</button>
-    </div>
-    <div v-else>
-      <p>Todos os utilizadores foram exibidos.</p>
-      <button>Começar o jogo</button>
-      <button @click="refreshGame">Sortear Novamente</button>
-    </div>
-    <button @click="backHome">Voltar</button>
+  <div class="game-view">
+    <transition name="game" @before-leave="beforeLeave" @leave="onLeave">
+      <div class="game-view__video" v-if="showIntro">
+        <TricksterLogo border="none" :animatedTitle="false">
+          <template #video>
+            <source src="@/assets/videos/trickster_intro.mp4" type="video/mp4">
+          </template>
+        </TricksterLogo>
+        <AnimatedText :title="'O IMPOSTOR'" />
+        <audio ref="audioPlayer" autoplay>
+          <source src="@/assets/audios/trickster_intro.mp3" type="audio/mp3">
+        </audio>
+      </div>
+    </transition>
   </div>
 </template>
-  
-  
+
 <script setup>
+import { onMounted, ref } from 'vue';
+import TricksterLogo from '@/components/TricksterLogo.vue';
+import AnimatedText from '@/components/AnimatedText.vue';
 
-    import {onMounted, computed, ref} from 'vue';
-    import { useGameStore } from '@/stores/game';
-    import wordData from '@/utils/words';
-    import router from '@/router';
+const audioPlayer = ref(null);
+const showIntro = ref(true);
 
-    const store = useGameStore();
-    const words = wordData.words;
-    const currentIndex = ref(0);
-    const showWord = ref(false);
-    const currentUser = computed(() => store.users[currentIndex.value]);
-    const lastIndex = ref([]);
-    const userColor = ref('');
-
-    const getRandomIndexExcludingLast = () => {
-      let randomIndex;
-      do {
-        randomIndex = Math.floor(Math.random() * words.length);
-      } 
-      while (lastIndex.value.includes(randomIndex));
-      lastIndex.value.push(randomIndex);
-      if (lastIndex.value.length > 10) {
-        lastIndex.value.shift();
-      }
-      return randomIndex;
+onMounted(() => {
+  setTimeout(() => {
+    if (audioPlayer.value) {
+      audioPlayer.value.muted = true; 
     }
+    showIntro.value = false; 
+  }, 5000);
+});
 
-    const backHome = () => {
-      router.push({name:'home'})
-    }
+function beforeLeave(el) {
+  el.style.opacity = 1;
+}
 
-    const nextUser = () => {
-        showWord.value = false;
-        currentIndex.value++;
-    }
-
-    const refreshGame = () => {
-        currentIndex.value = 0; 
-        const randomIndex = getRandomIndexExcludingLast();
-        store.updateUserWord(words[randomIndex]); 
-        showWord.value = false;
-    };
-
-    const generateColor = () => {
-      let cor = '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
-      return cor;
-    }
-
-    onMounted(() => {
-        const randomIndex = getRandomIndexExcludingLast();
-        store.updateUserWord(words[randomIndex]);
-        userColor.value = generateColor()
-    })
-
+function onLeave(el, done) {
+  el.offsetHeight; 
+  el.style.transition = 'opacity 0.5s ease';
+  el.style.opacity = 0;
+  el.addEventListener('transitionend', done, { once: true });
+}
 </script>
 
 <style lang="scss">
+@import '@/scss/mixings';
 
-  @import '@/scss/mixings';
+.game-view {
+  @include flexbox(column, center, center);
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
 
-  .game-view{
-    @include flexbox(column,center,center);
-    height: 100%; 
-    overflow: hidden; 
-    overflow: hidden;
-    margin: 15px;
-    border: 5px double #000;
-    box-shadow: 3px 2px 11px 10px rgb(90 77 77 / 16%);
-    border-radius: 10px;
-    &__user{
-      padding: 20px;
-    }
+  &__video {
+    @include flexbox(column, initial, initial);
+    width: 100%;
   }
+}
 
 </style>
-  
-  
