@@ -13,6 +13,10 @@
         </audio>
       </div>
     </transition>
+
+    <div class="drawing-wrap" v-if="!showIntro">
+      <Drawing />
+    </div>
   </div>
 </template>
 
@@ -20,6 +24,7 @@
 import { onMounted, ref } from 'vue';
 import TricksterLogo from '@/components/TricksterLogo.vue';
 import AnimatedText from '@/components/AnimatedText.vue';
+import Drawing from '@/components/Drawing.vue';
 
 const audioPlayer = ref(null);
 const showIntro = ref(true);
