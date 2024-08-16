@@ -13,7 +13,6 @@
         saveAs="png"
         :styles="{
           border: 'solid 1px #000',
-          width: '100%',
         }"
       />
   
@@ -22,7 +21,6 @@
         <button type="button" @click.prevent="$refs.VueCanvasDrawing.undo()">
           Desfazer
         </button>
-        <button type="button">Abrir votação</button>
       </div>
     </div>
   </template>

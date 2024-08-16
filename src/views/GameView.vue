@@ -17,6 +17,13 @@
     <div class="drawing-wrap" v-if="!showIntro">
       <Drawing />
     </div>
+    <div class="voting">
+      <button type="button" @click="openModal">Abrir votação</button>
+
+      <VotingModal :isOpen="isModalOpen" @close="closeModal">
+        <p>Conteúdo do slot</p>
+      </VotingModal>
+    </div>
   </div>
 </template>
 
@@ -25,9 +32,11 @@ import { onMounted, ref } from 'vue';
 import TricksterLogo from '@/components/TricksterLogo.vue';
 import AnimatedText from '@/components/AnimatedText.vue';
 import Drawing from '@/components/Drawing.vue';
+import VotingModal from '@/components/VotingModal.vue';
 
 const audioPlayer = ref(null);
 const showIntro = ref(true);
+const isModalOpen = ref(false);
 
 onMounted(() => {
   setTimeout(() => {
@@ -47,6 +56,14 @@ function onLeave(el, done) {
   el.style.transition = 'opacity 0.5s ease';
   el.style.opacity = 0;
   el.addEventListener('transitionend', done, { once: true });
+}
+
+const openModal = () => {
+  isModalOpen.value = true;
+}
+
+const closeModal = () => {
+  isModalOpen.value = false;
 }
 </script>
 
