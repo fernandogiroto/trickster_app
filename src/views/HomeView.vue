@@ -19,7 +19,7 @@
             <li class="game-users__list" v-for="(user,index) in store.users" :key="user">
               <div class="game-users__list--player">
                 <span>#0{{index+1}}</span>
-                <div class="color-circle" :style="{ backgroundColor: generateColor() }"></div>
+                <div class="color-circle" :style="{ backgroundColor: user.color }"></div>
                 <span>{{ user.username }} </span>
               </div>
               <IconTrash class="pointer" size="20" color="var(--error-70)" @click="removeUser(user.username)"/>
@@ -61,11 +61,6 @@
     store.removeUser(name);
   }
 
-  function generateColor() {
-    let cor = '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
-    return cor;
-  }
- 
 </script>
 
 <style lang="scss">

@@ -6,7 +6,12 @@ export const useGameStore = defineStore('game', () => {
 
   function addUser(username) {
     users.value.push(
-      { username,  word: ''});
+      { 
+        username,  
+        word: '',
+        color: '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0'),
+      }
+    );
     saveUsersToLocalStorage();
   }
 

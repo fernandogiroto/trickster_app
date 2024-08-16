@@ -1,6 +1,6 @@
 
 <template>
-  <div class="player-view"  :style="{ backgroundColor: userColor }">
+  <div class="player-view"  :style="{ backgroundColor: currentUser ? currentUser.color : '#c1c1c1' }">
     <div class="player-view__user" v-if="currentUser">
       <span class="player-view__user--player">{{ currentUser.username }}</span>
       <span class="player-view__user--current-word top-to-bottom--effect" v-if="showWord">{{ currentUser.word }}</span>
@@ -33,7 +33,6 @@
     const showWord = ref(false);
     const currentUser = computed(() => store.users[currentIndex.value]);
     const lastIndex = ref([]);
-    const userColor = ref('');
     const returnPage = ref(false);
 
     const getRandomIndexExcludingLast = () => {
@@ -42,6 +41,7 @@
         randomIndex = Math.floor(Math.random() * words.length);
       } 
       while (lastIndex.value.includes(randomIndex));
+
       lastIndex.value.push(randomIndex);
       if (lastIndex.value.length > 10) {
         lastIndex.value.shift();
@@ -70,15 +70,9 @@
         showWord.value = false;
     };
 
-    const generateColor = () => {
-      let cor = '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
-      return cor;
-    }
-
     onMounted(() => {
       const randomIndex = getRandomIndexExcludingLast();
       store.updateUserWord(words[randomIndex]);
-      userColor.value = generateColor()
       setTimeout(()=>{
         returnPage.value = true;
       },300)
