@@ -4,15 +4,28 @@ import { ref } from 'vue';
 export const useGameStore = defineStore('game', () => {
   const users = ref([]);
   const colors = ref(['#f95959','#42b883','#8594e4','#0092ca','#c7b198','#ff9c6d','#ffb5b5','#facf5a','#3baea0']);
+  const usedColors = ref([]);
 
   function addUser(username) {
+    if (colors.value.length === 0) {
+      colors.value = [...usedColors.value];
+      usedColors.value = [];
+    }
+
+    const colorIndex = Math.floor(Math.random() * colors.value.length);
+    const color = colors.value[colorIndex];
+
     users.value.push(
       { 
         username,  
         word: '',
-        color: '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0'),
+        color: color,
       }
     );
+
+    colors.value.splice(colorIndex, 1);
+    usedColors.value.push(color);
+    
     saveUsersToLocalStorage();
   }
 
