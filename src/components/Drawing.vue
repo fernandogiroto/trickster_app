@@ -29,10 +29,12 @@
   import { ref } from 'vue';
   import VueDrawingCanvas from 'vue-drawing-canvas';
   
+  const props = defineProps({
+		color:{ default:'#000000',type:String},
+	})
   // Estado para a imagem, linha e cor.
   const image = ref(null);
   const lineWidth = ref(2);
-  const color = ref('#000000');
 
 </script>
   

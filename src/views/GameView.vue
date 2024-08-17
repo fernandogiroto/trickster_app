@@ -15,10 +15,11 @@
     </transition>
 
     <div class="drawing-wrap" v-if="!showIntro">
-      <Drawing />
+      <Drawing :color="currentUser.color"/>
     </div>
     <div class="voting">
       <button type="button" @click="openModal">Abrir votação</button>
+      <button type="button" @click="nextUser">Próximo jogador</button>
 
       <VotingModal :isOpen="isModalOpen" @close="closeModal">
         <p>Conteúdo do slot</p>
@@ -28,12 +29,16 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, computed, ref } from 'vue';
+import { useGameStore } from '@/stores/game';
 import TricksterLogo from '@/components/TricksterLogo.vue';
 import AnimatedText from '@/components/AnimatedText.vue';
 import Drawing from '@/components/Drawing.vue';
 import VotingModal from '@/components/VotingModal.vue';
 
+const store = useGameStore();
+const currentIndex = ref(0);
+const currentUser = computed(() => store.users[currentIndex.value]);
 const audioPlayer = ref(null);
 const showIntro = ref(true);
 const isModalOpen = ref(false);
@@ -64,6 +69,14 @@ const openModal = () => {
 
 const closeModal = () => {
   isModalOpen.value = false;
+}
+
+const nextUser = () => {
+  currentIndex.value++;
+
+  if (currentIndex.value >= store.users.length) {
+    currentIndex.value = 0;
+  }
 }
 </script>
 
