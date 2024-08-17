@@ -17,6 +17,18 @@
     <div class="drawing-wrap" v-if="!showIntro">
       <Drawing :color="currentUser.color"/>
     </div>
+    <div class="players">
+      <ul class="user-list">
+        <li 
+        v-for="(user, index) in store.users"
+        :key="index"
+        :style="{ color: user.color}"
+        :class="{ 'current-user': index === currentIndex }"
+        >
+          {{  user.username }}
+        </li>
+      </ul>
+    </div>
     <div class="voting">
       <button type="button" @click="openModal">Abrir votação</button>
       <button type="button" @click="nextUser">Próximo jogador</button>
@@ -38,7 +50,9 @@ import VotingModal from '@/components/VotingModal.vue';
 
 const store = useGameStore();
 const currentIndex = ref(0);
-const currentUser = computed(() => store.users[currentIndex.value]);
+const currentUser = computed(() => {
+  return store.users[currentIndex.value];
+});
 const audioPlayer = ref(null);
 const showIntro = ref(true);
 const isModalOpen = ref(false);
@@ -94,6 +108,19 @@ const nextUser = () => {
     @include flexbox(column, initial, initial);
     width: 100%;
   }
+}
+
+.user-list {
+  display: flex;
+}
+
+.user-list li {
+  margin: 5px;
+}
+
+.current-user {
+  text-decoration: underline;
+  font-weight: bold;
 }
 
 </style>

@@ -7,7 +7,6 @@
             </div>
             <div class="modal-body">
                 <slot>
-                    HELLO WORLD!
                 </slot>
             </div>
         </div>
