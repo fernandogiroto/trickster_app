@@ -20,7 +20,7 @@
     <div class="players">
       <ul class="user-list">
         <li 
-        v-for="(user, index) in store.users"
+        v-for="(user, index) in activePlayers"
         :key="index"
         :style="{ color: user.color}"
         :class="{ 'current-user': index === currentIndex }"
@@ -33,7 +33,7 @@
       <button type="button" @click="openModal">Abrir votação</button>
       <button type="button" @click="nextUser">Próximo jogador</button>
 
-      <VotingModal :isOpen="isModalOpen" @close="closeModal">
+      <VotingModal :isOpen="isModalOpen" @close="closeModal" :activePlayers="activePlayers">
         <p>Conteúdo do slot</p>
       </VotingModal>
     </div>
@@ -50,12 +50,16 @@ import VotingModal from '@/components/VotingModal.vue';
 
 const store = useGameStore();
 const currentIndex = ref(0);
-const currentUser = computed(() => {
-  return store.users[currentIndex.value];
-});
 const audioPlayer = ref(null);
 const showIntro = ref(true);
 const isModalOpen = ref(false);
+const activePlayers = computed(() => {
+  return store.users.filter(user => !user.eliminated);
+});
+
+const currentUser = computed(() => {
+  return activePlayers.value[currentIndex.value] || null;
+});
 
 onMounted(() => {
   setTimeout(() => {
@@ -83,12 +87,15 @@ const openModal = () => {
 
 const closeModal = () => {
   isModalOpen.value = false;
+
+  if (!activePlayers.value[currentIndex]) {
+    nextUser();
+  }
 }
 
 const nextUser = () => {
   currentIndex.value++;
-
-  if (currentIndex.value >= store.users.length) {
+  if (currentIndex.value >= activePlayers.value.length) {
     currentIndex.value = 0;
   }
 }

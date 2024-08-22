@@ -33,15 +33,13 @@ import { useGameStore } from '@/stores/game';
 
 const props = defineProps({
     isOpen: Boolean,
+    activePlayers: Array
 });
 const store = useGameStore();
 const emit = defineEmits(['close']);
 const votingHistory = ref({}); 
 const currentIndex = ref(0); 
 const isLastUser = computed(() => currentIndex.value >= store.users.length - 1);
-const activePlayers = computed(() => {
-  return store.users.filter(user => !user.eliminated);
-});
 
 const closeModal = () => {
     emit('close');
@@ -87,7 +85,7 @@ const endVoting = () => {
   let maxVotes = 0;
   let userToEliminate = null;
   
-  store.users.forEach(user => {
+  props.activePlayers.forEach(user => {
     if (votingHistory.value[user.username].length > maxVotes) {
       maxVotes = votingHistory.value[user.username].length;
       userToEliminate = user;
@@ -100,7 +98,7 @@ const endVoting = () => {
     userToEliminate.eliminated = true;
   }
 
-  store.users.forEach(user => votingHistory.value[user.username] = []);
+  props.activePlayers.forEach(user => votingHistory.value[user.username] = []);
   currentIndex.value = 0;
 
   emit('close');

@@ -5,6 +5,7 @@ export const useGameStore = defineStore('game', () => {
   const users = ref([]);
   const colors = ref(['#f95959','#42b883','#8594e4','#0092ca','#c7b198','#ff9c6d','#ffb5b5','#facf5a','#3baea0']);
   const usedColors = ref([]);
+  const activePlayers = ref([]);
 
   function addUser(username) {
     if (colors.value.length === 0) {
