@@ -6,6 +6,7 @@
                 <button @click="closeModal">X</button>
             </div>
             <div class="modal-body">
+              <div v-if="!showResult" class="vote">
                 <ul class="user-list">
                     <li v-for="(user, index) in activePlayers" 
                       :key="index" 
@@ -22,6 +23,17 @@
                 Jogador a votar: <span :style="{ color:currentUser.color }">{{ currentUser.username }}</span>
                 <button @click="changeUser" :disabled="isLastUser">Próximo voto</button>
                 <button @click="endVoting">Encerrar Votação</button>
+              </div>
+              <div v-if="showResult" class="result">
+                <div v-if="userEliminated.username" class="has-eliminated">
+                  <h3 v-if="!isImpostor">{{  userEliminated.username }} não é impostor...</h3>
+                  <h3 v-if="isImpostor">{{ userEliminated.username }} é o impostor!</h3>
+                </div>
+                <div v-if="!userEliminated.username" class="no-eliminated">
+                  <h3>Ninguém foi eliminado!</h3>
+                </div>
+                
+              </div>
             </div>
         </div>
     </div>
@@ -33,16 +45,22 @@ import { useGameStore } from '@/stores/game';
 
 const props = defineProps({
     isOpen: Boolean,
-    activePlayers: Array
+    activePlayers: Array,
 });
 const store = useGameStore();
 const emit = defineEmits(['close']);
 const votingHistory = ref({}); 
 const currentIndex = ref(0); 
 const isLastUser = computed(() => currentIndex.value >= store.users.length - 1);
+const isImpostor = ref(false);
+const showResult = ref(false);
+const userEliminated = ref([]);
 
 const closeModal = () => {
     emit('close');
+    isImpostor.value = false;
+    showResult.value = false;
+    userEliminated.value = [];
 }
 
 store.users.forEach(user => {
@@ -96,12 +114,17 @@ const endVoting = () => {
 
   if (userToEliminate) {
     userToEliminate.eliminated = true;
+    userEliminated.value = userToEliminate;
+
+    if (userToEliminate.word === 'impostor') {
+      emit('finalize-voting', true);
+      isImpostor.value = true;
+    }
   }
 
+  showResult.value = true;
   props.activePlayers.forEach(user => votingHistory.value[user.username] = []);
   currentIndex.value = 0;
-
-  emit('close');
 };
 
 </script>

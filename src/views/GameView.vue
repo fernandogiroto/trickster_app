@@ -33,7 +33,12 @@
       <button type="button" @click="openModal">Abrir votação</button>
       <button type="button" @click="nextUser">Próximo jogador</button>
 
-      <VotingModal :isOpen="isModalOpen" @close="closeModal" :activePlayers="activePlayers">
+      <VotingModal 
+        :isOpen="isModalOpen" 
+        @close="closeModal" 
+        :activePlayers="activePlayers" 
+        @finalize-voting="finalizeVoting"
+      >
         <p>Conteúdo do slot</p>
       </VotingModal>
     </div>
@@ -53,10 +58,10 @@ const currentIndex = ref(0);
 const audioPlayer = ref(null);
 const showIntro = ref(true);
 const isModalOpen = ref(false);
+const impostorDiscovered = ref(false);
 const activePlayers = computed(() => {
   return store.users.filter(user => !user.eliminated);
 });
-
 const currentUser = computed(() => {
   return activePlayers.value[currentIndex.value] || null;
 });
@@ -99,6 +104,12 @@ const nextUser = () => {
     currentIndex.value = 0;
   }
 }
+
+const finalizeVoting = (eliminatedPlayer) => {
+  if (eliminatedPlayer) {
+    impostorDiscovered.value = true;
+  }
+};
 </script>
 
 <style lang="scss">
