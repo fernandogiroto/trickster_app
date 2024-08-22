@@ -26,8 +26,10 @@
     import Button from '@/components/Button.vue';
     import wordData from '@/utils/words';
     import router from '@/router';
+    import { useRoute } from 'vue-router';
 
     const store = useGameStore();
+    const route = useRoute();
     const words = wordData.words;
     const currentIndex = ref(0);
     const showWord = ref(false);
@@ -69,6 +71,7 @@
         const randomIndex = getRandomIndexExcludingLast();
         store.updateUserWord(words[randomIndex]); 
         showWord.value = false;
+        store.users.forEach(user => user.eliminated = false);
     };
 
     onMounted(() => {
@@ -77,6 +80,10 @@
       setTimeout(()=>{
         returnPage.value = true;
       },300)
+
+      if (route.query.refresh === 'true') {
+        refreshGame();
+      }
     })
 
 </script>

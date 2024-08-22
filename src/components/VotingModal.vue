@@ -171,6 +171,7 @@ const endVoting = () => {
 .user-list {
   list-style: none;
   padding: 0;
+  flex-direction: column;
 }
 
 .user-list li {

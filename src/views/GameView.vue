@@ -14,24 +14,33 @@
       </div>
     </transition>
 
-    <div class="drawing-wrap" v-if="!showIntro">
-      <Drawing :color="currentUser.color"/>
-    </div>
-    <div class="players">
-      <ul class="user-list">
-        <li 
-        v-for="(user, index) in activePlayers"
-        :key="index"
-        :style="{ color: user.color}"
-        :class="{ 'current-user': index === currentIndex }"
-        >
-          {{  user.username }}
-        </li>
-      </ul>
-    </div>
-    <div class="voting">
-      <button type="button" @click="openModal">Abrir votação</button>
-      <button type="button" @click="nextUser">Próximo jogador</button>
+    <div v-if="!showIntro" class="game-view">
+      <div class="drawing-wrap" >
+        <Drawing :color="currentUser.color"/>
+      </div>
+
+      <div v-if="!impostorDiscovered" class="players">
+        <ul class="user-list">
+          <li 
+          v-for="(user, index) in activePlayers"
+          :key="index"
+          :style="{ color: user.color}"
+          :class="{ 'current-user': index === currentIndex }"
+          >
+            {{  user.username }}
+          </li>
+        </ul>
+      </div>
+
+      <div v-if="!impostorDiscovered" class="voting">
+        <button type="button" @click="openModal">Abrir votação</button>
+        <button type="button" @click="nextUser">Próximo jogador</button>
+      </div>
+
+      <div v-if="impostorDiscovered" class="restart">
+        <button type="button" @click="restartGame">Restart game</button>
+      </div>
+
 
       <VotingModal 
         :isOpen="isModalOpen" 
@@ -52,8 +61,10 @@ import TricksterLogo from '@/components/TricksterLogo.vue';
 import AnimatedText from '@/components/AnimatedText.vue';
 import Drawing from '@/components/Drawing.vue';
 import VotingModal from '@/components/VotingModal.vue';
+import { useRouter } from 'vue-router';
 
 const store = useGameStore();
+const router = useRouter();
 const currentIndex = ref(0);
 const audioPlayer = ref(null);
 const showIntro = ref(true);
@@ -110,6 +121,13 @@ const finalizeVoting = (eliminatedPlayer) => {
     impostorDiscovered.value = true;
   }
 };
+
+const restartGame = () => {
+  router.push({
+    name:'players',
+    query: { refresh: 'true'}
+  })
+}
 </script>
 
 <style lang="scss">
