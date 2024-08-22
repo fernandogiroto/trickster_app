@@ -16,7 +16,11 @@
                         Votar
                         </button>
                         <span v-if="votingHistory[user.username].length > 0">
-                        Votado por: {{ votingHistory[user.username].join(', ') }}
+
+                          <IconUserFilled 
+                            v-for="votes in votingHistory[user.username]" 
+                            size="20" 
+                            :color="votes.color" /> 
                         </span>
                     </li>
                 </ul>
@@ -32,7 +36,6 @@
                 <div v-if="!userEliminated.username" class="no-eliminated">
                   <h3>Ninguém foi eliminado!</h3>
                 </div>
-                
               </div>
             </div>
         </div>
@@ -42,6 +45,7 @@
 <script setup>
 import { defineProps, defineEmits, computed, ref  } from 'vue';
 import { useGameStore } from '@/stores/game';
+import { IconUserFilled } from '@tabler/icons-vue';
 
 const props = defineProps({
     isOpen: Boolean,
@@ -82,12 +86,19 @@ const currentUser = computed(() => {
 });
 
 const vote = (user) => {
-  const previousVote = store.users.find(u => votingHistory.value[u.username].includes(currentUser.value.username));
+  const previousVote = props.activePlayers.find(u =>
+    votingHistory.value[u.username].some(voter => voter.username === currentUser.value.username)
+  );
+  
   if (previousVote) {
-    votingHistory.value[previousVote.username] = votingHistory.value[previousVote.username].filter(voter => voter !== currentUser.value.username);
+    votingHistory.value[previousVote.username] = votingHistory.value[previousVote.username].filter(voter => voter.username !== currentUser.value.username);
   }
 
-  votingHistory.value[user.username].push(currentUser.value.username);
+  votingHistory.value[user.username].push({
+    username: currentUser.value.username,
+    color: currentUser.value.color,
+    id: currentUser.value.id,
+  });
 };
 
 const changeUser = () => {
