@@ -20,6 +20,8 @@ export const useGameStore = defineStore('game', () => {
         username,  
         word: '',
         color: color,
+        eliminated: false,
+        votes: 0
       }
     );
 
