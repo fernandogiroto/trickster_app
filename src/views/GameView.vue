@@ -37,7 +37,7 @@
         <button type="button" @click="nextUser">Próximo jogador</button>
       </div>
 
-      <div v-if="impostorDiscovered" class="restart">
+      <div class="restart">
         <button type="button" @click="restartGame">Restart game</button>
       </div>
 

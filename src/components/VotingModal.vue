@@ -26,7 +26,7 @@
                 </ul>
                 Jogador a votar: <span :style="{ color:currentUser.color }">{{ currentUser.username }}</span>
                 <button @click="changeUser" :disabled="isLastUser">Próximo voto</button>
-                <button @click="endVoting">Encerrar Votação</button>
+                <button @click="endVoting" :disabled="!isLastUser">Encerrar Votação</button>
               </div>
               <div v-if="showResult" class="result">
                 <div v-if="userEliminated.username" class="has-eliminated">
@@ -43,7 +43,7 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits, computed, ref  } from 'vue';
+import { computed, ref  } from 'vue';
 import { useGameStore } from '@/stores/game';
 import { IconUserFilled } from '@tabler/icons-vue';
 
@@ -55,7 +55,7 @@ const store = useGameStore();
 const emit = defineEmits(['close']);
 const votingHistory = ref({}); 
 const currentIndex = ref(0); 
-const isLastUser = computed(() => currentIndex.value >= store.users.length - 1);
+const isLastUser = computed(() => currentIndex.value >= props.activePlayers.length - 1);
 const isImpostor = ref(false);
 const showResult = ref(false);
 const userEliminated = ref([]);
