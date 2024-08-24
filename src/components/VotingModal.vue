@@ -25,7 +25,7 @@
                     </li>
                 </ul>
                 Jogador a votar: <span :style="{ color:currentUser.color }">{{ currentUser.username }}</span>
-                <button @click="changeUser" :disabled="isLastUser">Próximo voto</button>
+                <button @click="changeUser">Próximo voto</button>
                 <button @click="endVoting" :disabled="!isLastUser">Encerrar Votação</button>
               </div>
               <div v-if="showResult" class="result">
@@ -35,6 +35,10 @@
                 </div>
                 <div v-if="!userEliminated.username" class="no-eliminated">
                   <h3>Ninguém foi eliminado!</h3>
+                </div>
+                <div v-if="impostorWin">
+                  {{  store.users.find(user => user.word === 'impostor').username }} era o impostor!
+                  O impostor venceu!
                 </div>
               </div>
             </div>
@@ -59,6 +63,7 @@ const isLastUser = computed(() => currentIndex.value >= props.activePlayers.leng
 const isImpostor = ref(false);
 const showResult = ref(false);
 const userEliminated = ref([]);
+const impostorWin = ref(false);
 
 const closeModal = () => {
     emit('close');
@@ -130,6 +135,10 @@ const endVoting = () => {
     if (userToEliminate.word === 'impostor') {
       emit('finalize-voting', true);
       isImpostor.value = true;
+    }
+
+    if (props.activePlayers.length === 3) {
+      impostorWin.value = true;
     }
   }
 
