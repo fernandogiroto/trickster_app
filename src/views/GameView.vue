@@ -79,17 +79,6 @@ onMounted(() => {
   }, 5000);
 });
 
-function beforeLeave(el) {
-  el.style.opacity = 1;
-}
-
-function onLeave(el, done) {
-  el.offsetHeight; 
-  el.style.transition = 'opacity 0.5s ease';
-  el.style.opacity = 0;
-  el.addEventListener('transitionend', done, { once: true });
-}
-
 const openModal = () => {
   isModalOpen.value = true;
 }

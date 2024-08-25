@@ -28,7 +28,7 @@
         </div>
     </div>
     <div class="rules pointer">
-      <IconFile size="25" color="#FFFFFF"></IconFile>
+      <IconQuestionMark size="25" color="#FFFFFF" />
     </div>
   </div>
 </template>
@@ -40,7 +40,7 @@
   import TricksterLogo from '@/components/TricksterLogo.vue';
   import Button from '@/components/Button.vue';
 
-  import { IconTrash,IconFile } from '@tabler/icons-vue';
+  import { IconTrash,IconQuestionMark } from '@tabler/icons-vue';
   import router from '@/router';
   const store = useGameStore();
 
