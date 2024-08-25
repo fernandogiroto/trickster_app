@@ -122,7 +122,6 @@ const restartGame = () => {
   height: 100%;
   overflow: hidden;
   position: relative;
-  padding: 15px 10px;
 
   &__video{
     @include flexbox(column, initial, initial);
@@ -150,6 +149,7 @@ const restartGame = () => {
     @include flexbox(row, center, initial);
     gap: 10px;
     width: 100%;
+    padding: 0px 10px;
   }
 }
 

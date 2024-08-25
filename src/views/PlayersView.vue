@@ -5,11 +5,11 @@
       <span class="player-view__user--player">{{ currentUser.username }}</span>
       <span class="player-view__user--current-word top-to-bottom--effect" v-if="showWord">{{ currentUser.word }}</span>
       <Button background="button__dark text-uppercase" width="100%" height="50px" @click="showWord = true"  v-if="!showWord">MOSTRAR PALAVRA</Button>
-      <Button background="button-outline__dark text-uppercase" width="100%" height="50px" fontSize="13px" v-if="showWord" @click="nextUser">Esconder Palavra e Próximo</button>
+      <Button background="button-outline__dark text-uppercase" width="100%" height="50px" fontSize="13px" v-if="showWord" @click="nextUser">Esconder Palavra e Passar</button>
     </div>
     <div class="player-view__user" v-else>
       <span class="player-view__user--finished">Todos os utilizadores foram exibidos.</span>
-      <Button background="button__dark text-uppercase" width="100%" height="50px" @click="goToGame">Começar o jogo</Button>
+      <Button background="button__dark text-uppercase" width="100%" height="50px" @click="goToGame">Começar o Jogo</Button>
       <Button background="button-outline__dark text-uppercase" width="100%" height="50px" fontSize="13px" @click="refreshGame">Sortear Novamente</Button>
     </div>
     <div class="return-button bottom-to-top--effect" v-if="returnPage">
@@ -119,6 +119,9 @@
         border: 2px dotted #000;
         text-transform: uppercase;
         background-color: var(--theme-color);
+      }
+      &--finished{
+        text-align: center;
       }
     }
   }

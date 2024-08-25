@@ -1,7 +1,7 @@
 <template>
   <div class="home-view">
     <div class="home-view__video">
-      <TricksterLogo height="180px">
+      <TricksterLogo height="178px">
         <template #video>
           <source src="@/assets/videos/trickster.mov" type="video/mp4">
         </template>
