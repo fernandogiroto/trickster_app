@@ -1,6 +1,6 @@
 <template>
   <div class="game-view">
-    <!-- VIDEO GAME INTRO -->
+    <!-- GAME INTRO -->
     <div class="game-view__video" v-if="showIntro">
       <TricksterLogo border="none" :animatedTitle="false">
         <template #video>
@@ -48,7 +48,7 @@
       :activePlayers="activePlayers" 
       @finalize-voting="finalizeVoting">
     </GameVoting>
-     <!-- AUDIO CHANGE PLAYER -->
+     <!-- CHANGE PLAYER AUDIO -->
     <audio ref="changePlayer">
       <source src="@/assets/audios/change-player.mp3" type="audio/mp3">
     </audio>
@@ -85,17 +85,23 @@ const activePlayers = computed(() => {
 const currentUser = computed(() => {
   return activePlayers.value[currentIndex.value] || null;
 });
+const playersNumber = computed(() => {
+  if(activePlayers.value.length <=3){
+    return 2;
+  }else{
+    return 3;
+  }
+});
 
 const flickingOptions = {
     circular: true,
     align: 'center',
     moveType: 'strict',
-    panelsPerView: 3,
+    panelsPerView: playersNumber.value,
     disableOnInit: true,
     defaultIndex: 1
-
   }
-  const plugins = [];
+const plugins = [];
 
 onMounted(() => {
   setTimeout(() => {
