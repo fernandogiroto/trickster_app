@@ -9,6 +9,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@egjs/flicking-plugins": "^4.7.1",
+    "@egjs/vue3-flicking": "^4.11.4",
     "@tabler/icons-vue": "^3.12.0",
     "pinia": "^2.1.7",
     "pinia-plugin-persistedstate": "^3.2.1",
@@ -28,8 +30,8 @@
     "vite-plugin-pwa": "^0.20.1",
     "vite-plugin-vue-devtools": "^7.3.1",
     "vitest": "^1.6.0",
-    "workbox-precaching": "^7.1.0",
-    "vue-drawing-canvas": "^1.0.14"
+    "vue-drawing-canvas": "^1.0.14",
+    "workbox-precaching": "^7.1.0"
   },
   "type": "module"
 }

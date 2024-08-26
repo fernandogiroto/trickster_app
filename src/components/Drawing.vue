@@ -55,7 +55,7 @@
   .drawing {
     @include flexbox(column, center, center);
     &__canvas{
-      border: 1px solid;
+      border: none;
     }
     &__controls {
       @include flexbox(row, center, center);
