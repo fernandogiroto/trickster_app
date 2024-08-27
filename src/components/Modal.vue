@@ -137,7 +137,7 @@ const endVoting = () => {
       isImpostor.value = true;
     }
 
-    if (props.activePlayers.length === 3) {
+    if (props.activePlayers.length === 3 && userToEliminate.word !== 'impostor') {
       impostorWin.value = true;
     }
   }

@@ -15,7 +15,7 @@
     <!-- GAME PLAYERS -->
     <div class="game-view__players" v-if="!showIntro">
         <Flicking :options="flickingOptions" :plugins="plugins" ref="flicking">
-          <div class="flicking-panel"  v-for="(user, index) in activePlayers" :key="user">
+          <div class="flicking-panel"  v-for="(user, index) in activePlayers" :key="index">
             <div 
             :class="[
                 'flicking-panel__player',
@@ -33,7 +33,7 @@
     </div>    
     <!-- GAME DRAWING -->
     <div class="game-view__drawing" v-if="!showIntro">
-      <Drawing :color="currentUser.color"/>
+      <Drawing :color="currentUser ? currentUser.color : '#000'"/>
     </div>
     <!-- GAME OPTIONS -->
     <div class="game-view__options" v-if="!impostorDiscovered && !showIntro">
