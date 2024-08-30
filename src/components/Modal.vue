@@ -58,7 +58,7 @@
             </div>
             <div class="modal-content__voting--actions">
               <Button padding="0px" font-size="12px"  @click="changeUser">Próximo Voto</Button>
-              <Button class="button-outline__primary" padding="0px" font-size="12px" @click="endVoting"  :disabled="!isLastUser">Encerrar Votação</Button>
+              <Button class="button-outline__primary" padding="0px" font-size="12px" @click="endVoting"  :disabled="votingCount < props.activePlayers.length">Encerrar Votação</Button>
             </div>
           </div>
         </div>
@@ -85,6 +85,7 @@ const props = defineProps({
 const store = useGameStore();
 const emit = defineEmits(['update:isOpen']);
 const votingHistory = ref({}); 
+const votingCount = ref(1);
 const currentIndex = ref(0); 
 const isLastUser = computed(() => currentIndex.value >= props.activePlayers.length - 1);
 const isImpostor = ref(false);
@@ -136,6 +137,7 @@ const vote = (user) => {
 const changeUser = () => {
   do {
     currentIndex.value++;
+    votingCount.value++;
     if (currentIndex.value >= store.users.length) {
       currentIndex.value = 0;
     }
@@ -145,7 +147,7 @@ const changeUser = () => {
 const endVoting = () => {
   let maxVotes = 0;
   let userToEliminate = null;
-  
+
   props.activePlayers.forEach(user => {
     if (votingHistory.value[user.username].length > maxVotes) {
       maxVotes = votingHistory.value[user.username].length;
@@ -172,6 +174,7 @@ const endVoting = () => {
   showResult.value = true;
   props.activePlayers.forEach(user => votingHistory.value[user.username] = []);
   currentIndex.value = 0;
+  votingCount.value = 1;
 
   showResult.value = true;
 };
