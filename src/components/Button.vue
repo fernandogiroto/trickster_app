@@ -13,7 +13,7 @@ const props = defineProps({
     height: { type: String, default: '35px' },
     fontSize: { type: String, default: '14px' },
     borderRadius: { type: String, default: '4px' },
-    padding: { type: String, default: '14px' },
+    padding: { type: String, default: '16px' },
 })
 </script>
 
@@ -29,7 +29,7 @@ const props = defineProps({
         font-weight: 600;
         line-height: 24px;
         font-size: v-bind(fontSize);
-        padding: v-bind(fontSize);
+        padding: v-bind(padding);
         border-radius: v-bind(borderRadius);
         box-shadow: 0px 2px 1px 0px #0000000A;
         gap: 10px;

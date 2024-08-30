@@ -1,75 +1,82 @@
 <template>
-    <div class="modal-overlay" v-if="isOpen">
-        <div class="modal">
-            <div class="modal-header">
-                <h3>VOTAÇÃO</h3>
-                <button @click="closeModal">X</button>
+  <Teleport to="#app">
+    <div v-if="isOpen" class="backdrop" @click="toggleModal"></div>
+      <div class="modal" v-if="isOpen">
+        <div class="modal-content top-to-bottom--effect">
+          <div class="modal-content__header">
+            <div @click="toggleModal" class="modal-content__header--close">
+              <IconX size="22" />
             </div>
-            <div class="modal-body">
-              <div v-if="!showResult" class="vote">
-                <ul class="user-list">
-                    <li v-for="(user, index) in activePlayers" 
-                      :key="index" 
-                      :style="{ color: user.color }">
-                        {{ user.username }}
-                        <button v-if="user.username !== currentUser.username" @click="vote(user)">
-                        Votar
-                        </button>
-                        <span v-if="votingHistory[user.username].length > 0">
-
-                          <IconUserFilled 
-                            v-for="votes in votingHistory[user.username]" 
-                            size="20" 
-                            :color="votes.color" /> 
-                        </span>
-                    </li>
-                </ul>
-                Jogador a votar: <span :style="{ color:currentUser.color }">{{ currentUser.username }}</span>
-                <button @click="changeUser">Próximo voto</button>
-                <button @click="endVoting" :disabled="!isLastUser">Encerrar Votação</button>
-              </div>
-              <div v-if="showResult" class="result">
-                <div v-if="userEliminated.username" class="has-eliminated">
-                  <h3 v-if="!isImpostor">{{  userEliminated.username }} não é impostor...</h3>
-                  <h3 v-if="isImpostor">{{ userEliminated.username }} é o impostor!</h3>
-                </div>
-                <div v-if="!userEliminated.username" class="no-eliminated">
-                  <h3>Ninguém foi eliminado!</h3>
-                </div>
-                <div v-if="impostorWin">
-                  {{  store.users.find(user => user.word === 'impostor').username }} era o impostor!
-                  O impostor venceu!
-                </div>
-              </div>
+          </div>
+          <div class="modal-content__voting" v-if="!showResult">
+            <div class="modal-content__voting--active-player">
+              Jogador a votar: <span :style="{ color:currentUser.color }">{{ currentUser.username }}</span>
             </div>
+            <div class="modal-players">
+              <div class="modal-players__player" v-for="(user, index) in activePlayers" :key="index">
+                <div class="modal-players__player--votes">
+                  <span :style="{ color: user.color }">{{ user.username }}</span>
+                  <div class="modal-players__player--votes--voted" v-for="votes in votingHistory[user.username]">
+                    <IconSpy size="20" :color="votes.color" stroke="2.2" /> 
+                  </div>
+                </div>
+                <Button widthMobile="65px" height="20px" padding="0px" font-size="12px" @click="vote(user)" :disabled="user.username == currentUser.username">Votar</Button>  
+                </div>
+            </div>
+            <div class="modal-content__voting--actions">
+              <Button padding="0px" font-size="12px"  @click="changeUser">Próximo Voto</Button>
+              <Button class="button-outline__primary" padding="0px" font-size="12px" @click="endVoting"  :disabled="!isLastUser">Encerrar Votação</Button>
+            </div>
+          </div>
+          <div class="modal-content__result" v-if="showResult">
+            <div v-if="userEliminated.username" class="has-eliminated">
+              <h3 v-if="!isImpostor">{{  userEliminated.username }} não é impostor...</h3>
+              <h3 v-if="isImpostor">{{ userEliminated.username }} é o impostor!</h3>
+            </div>
+            <div v-if="!userEliminated.username" class="no-eliminated">
+              <h3>Ninguém foi eliminado!</h3>
+            </div>
+            <div v-if="impostorWin">
+              {{  store.users.find(user => user.word === 'impostor').username }} era o impostor!
+              O impostor venceu!
+            </div>
+          </div>
         </div>
-    </div>
+      </div>
+    </Teleport>
 </template>
 
 <script setup>
 import { computed, ref  } from 'vue';
 import { useGameStore } from '@/stores/game';
-import { IconUserFilled } from '@tabler/icons-vue';
+import { IconSpy,IconX } from '@tabler/icons-vue';
+import Button from '@/components/Button.vue';
+import {  watch } from 'vue'
 
 const props = defineProps({
     isOpen: Boolean,
     activePlayers: Array,
+    isOpen: { type: Boolean, default: false },
+    width: { type: String, default: '400px' },
+    widthMobile: { type: String, default: '85%' },
+    title: { type: String }
 });
+
 const store = useGameStore();
-const emit = defineEmits(['close']);
+const emit = defineEmits(['update:isOpen']);
 const votingHistory = ref({}); 
 const currentIndex = ref(0); 
 const isLastUser = computed(() => currentIndex.value >= props.activePlayers.length - 1);
 const isImpostor = ref(false);
+const isOpen = ref(props.isOpen)
 const showResult = ref(false);
 const userEliminated = ref([]);
 const impostorWin = ref(false);
 
-const closeModal = () => {
-    emit('close');
-    isImpostor.value = false;
-    showResult.value = false;
-    userEliminated.value = [];
+const resetVote = () => {
+  isImpostor.value = false;
+  showResult.value = false;
+  userEliminated.value = [];
 }
 
 store.users.forEach(user => {
@@ -147,46 +154,82 @@ const endVoting = () => {
   currentIndex.value = 0;
 };
 
+watch(() => props.isOpen, (newVal) => {
+  isOpen.value = newVal;
+})
+
+const toggleModal = () => {
+  resetVote();
+  isOpen.value = !isOpen.value
+  emit('update:isOpen', isOpen.value)
+}
+
 </script>
 
-<style scoped>
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
+<style lang="scss" scoped>
 
-.modal {
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  min-width: 300px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
-}
+  @import '@/scss/mixings';
 
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
+  .modal {
+    @include flexbox(row, center, center);
+    width: 100dvw;
+    height: 100dvh;
+    position: fixed;
+    z-index:200;
+    &-content {
+      @include flexbox(column, flex-start, flex-start);
+      padding:15px;
+      width: 80%;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.15);
+      &__header{
+        @include flexbox(row, flex-end, center);
+        width: 100%;
+        margin-top: -25px;
+        &--close{
+          background: #fff;
+          border-radius: 50%;
+          padding: 5px;
+        }
+      }
+      &__voting{
+        @include flexbox(column, space-between, initial);
+        gap: 40px;
+        width: 100%;
+        &--active-player{
+          @include flexbox(row, flex-start, initial);
+          gap: 5px;
+        }
+        &--actions{
+          @include flexbox(row, center, initial);
+          gap: 15px;
+   
+        }
+      }
+    }
+  }
 
-.modal-body {
-  margin-top: 10px;
-}
+  .modal-players{
+    @include flexbox(column, flex-start, initial);
+    gap: 15px;
+    &__player{
+     @include flexbox(row, space-between, center);
+     &--votes{
+        @include flexbox(row, space-between, inherit);
+        height: 25px;
+        gap: 5px;
+        &--voted{
+          @include flexbox(column, flex-start, initial);
+          padding: 3px;
+          background: #000;
+          border-radius: 5px;
+          
+        }
+      }
+    }
+  }
 
-.voting-modal {
-  background: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
 
 .user-list {
   list-style: none;

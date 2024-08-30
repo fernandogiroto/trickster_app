@@ -21,10 +21,10 @@
       </div>  
       <!-- CONTROLS -->
       <div class="drawing__controls">
-        <Button padding="0px" font-size="12px" @click.prevent="$refs.VueCanvasDrawing.undo()">
+        <Button padding="10px" font-size="12px" @click.prevent="$refs.VueCanvasDrawing.undo()">
           <IconArrowBackUp size="20" /> Desfazer
         </Button>
-        <Button padding="0px" font-size="12px" @click.prevent="$refs.VueCanvasDrawing.reset()">
+        <Button padding="12px" font-size="12px" @click.prevent="$refs.VueCanvasDrawing.reset()">
           <IconEraser  size="20" /> Limpar
         </Button>
       </div>

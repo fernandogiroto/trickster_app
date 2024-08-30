@@ -37,16 +37,15 @@
     </div>
     <!-- GAME OPTIONS -->
     <div class="game-view__options" v-if="!impostorDiscovered && !showIntro">
-      <Button padding="0px" font-size="12px" @click="openModal">Abrir Votação</Button>
+      <Button padding="px" font-size="12px" @click="toggleModal">Abrir Votação</Button>
       <Button padding="0px" font-size="12px" class="button-outline__primary" @click="nextUser">Próximo</Button>
       <Button padding="0px" font-size="12px" @click="restartGame">Restart Game</Button>
     </div>
     <!-- GAME VOTING -->
     <GameVoting 
       :isOpen="isModalOpen" 
-      @close="closeModal" 
-      :activePlayers="activePlayers" 
-      @finalize-voting="finalizeVoting">
+      @update:isOpen="toggleModal()"
+      :activePlayers="activePlayers" >
     </GameVoting>
      <!-- CHANGE PLAYER AUDIO -->
     <audio ref="changePlayer">
@@ -112,17 +111,6 @@ onMounted(() => {
   }, 5000);
 });
 
-const openModal = () => {
-  isModalOpen.value = true;
-}
-
-const closeModal = () => {
-  isModalOpen.value = false;
-
-  if (!activePlayers.value[currentIndex]) {
-    nextUser();
-  }
-}
 
 const nextUser = () => {
   currentIndex.value++;
@@ -148,11 +136,16 @@ const finalizeVoting = (eliminatedPlayer) => {
   }
 };
 
+
 const restartGame = () => {
   router.push({
     name:'players',
     query: { refresh: 'true'}
   })
+}
+
+const toggleModal = () => {
+  isModalOpen.value = !isModalOpen.value
 }
 </script>
 
