@@ -2,7 +2,40 @@
   <Teleport to="#app">
     <div v-if="isOpen" class="backdrop" @click="toggleModal"></div>
       <div class="modal" v-if="isOpen">
-        <div class="modal-content top-to-bottom--effect">
+        <div class="modal-results top-to-bottom--effect" v-if="showResult">
+          <div @click="toggleModal" class="modal-results--close">
+            <IconX size="22" />
+          </div>
+          <!-- WRONG IMPOSTOR -->
+          <div class="modal-results__wrong-impostor">
+            <div class="modal-results__wrong-impostor--title">
+              <span>FERNANDO</span>
+              <span>NAO ERA O IMPOSTOR</span>
+            </div>
+            <video autoplay muted playsinline class="modal-results__wrong-impostor--video"> 
+              <source src="@/assets/videos/trickster_wrong.mp4" type="video/mp4">
+            </video>
+            <audio ref="audioPlayer" autoplay>
+              <source src="@/assets/audios/trickster_wrong.mp3" type="audio/mp3">
+            </audio>
+          </div>
+
+
+          <!-- <div v-if="userEliminated.username" class="has-eliminated">
+            <h3 v-if="!isImpostor">{{  userEliminated.username }} não é impostor...</h3>
+            <h3 v-if="isImpostor">{{ userEliminated.username }} é o impostor!</h3>
+          </div>
+          <div v-if="!userEliminated.username" class="no-eliminated">
+            <h3>Ninguém foi eliminado!</h3>
+          </div>
+          <div v-if="impostorWin">
+            {{  store.users.find(user => user.word === 'impostor').username }} era o impostor!
+            O impostor venceu!
+          </div> -->
+
+
+        </div>
+        <div class="modal-content top-to-bottom--effect" v-if="!showResult">
           <div class="modal-content__header">
             <div @click="toggleModal" class="modal-content__header--close">
               <IconX size="22" />
@@ -26,19 +59,6 @@
             <div class="modal-content__voting--actions">
               <Button padding="0px" font-size="12px"  @click="changeUser">Próximo Voto</Button>
               <Button class="button-outline__primary" padding="0px" font-size="12px" @click="endVoting"  :disabled="!isLastUser">Encerrar Votação</Button>
-            </div>
-          </div>
-          <div class="modal-content__result" v-if="showResult">
-            <div v-if="userEliminated.username" class="has-eliminated">
-              <h3 v-if="!isImpostor">{{  userEliminated.username }} não é impostor...</h3>
-              <h3 v-if="isImpostor">{{ userEliminated.username }} é o impostor!</h3>
-            </div>
-            <div v-if="!userEliminated.username" class="no-eliminated">
-              <h3>Ninguém foi eliminado!</h3>
-            </div>
-            <div v-if="impostorWin">
-              {{  store.users.find(user => user.word === 'impostor').username }} era o impostor!
-              O impostor venceu!
             </div>
           </div>
         </div>
@@ -152,6 +172,8 @@ const endVoting = () => {
   showResult.value = true;
   props.activePlayers.forEach(user => votingHistory.value[user.username] = []);
   currentIndex.value = 0;
+
+  showResult.value = true;
 };
 
 watch(() => props.isOpen, (newVal) => {
@@ -173,7 +195,7 @@ const toggleModal = () => {
   .modal {
     @include flexbox(row, center, center);
     width: 100dvw;
-    height: 100dvh;
+    height: 90dvh;
     position: fixed;
     z-index:200;
     &-content {
@@ -188,7 +210,7 @@ const toggleModal = () => {
         width: 100%;
         margin-top: -25px;
         &--close{
-          background: #fff;
+          background: #FFF;
           border-radius: 50%;
           padding: 5px;
         }
@@ -208,7 +230,54 @@ const toggleModal = () => {
         }
       }
     }
+    &-results{
+      @include flexbox(column, center, end);
+      gap: 5px;
+      width: 80%;
+      position: relative;
+      &__wrong-impostor {
+        width: 100%;
+        border-radius: 8px;
+        position: relative;
+        &::after {
+          content: "";
+          position: absolute;
+          border-radius: 8px;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: #000;
+          opacity: 0;
+          pointer-events: none;
+          animation: impostorFade 5.7s ease-in-out forwards; 
+        }
+        &--video{
+          border-radius: 8px;
+          margin-bottom: -4px;
+          width: 100%;
+        }
+        &--title{
+          @include flexbox(column, center, center);
+          gap: 5px;
+          position: absolute;
+          height: 100%;
+          width: 100%;
+          z-index: 1000;
+          color: #FFF;
+          animation: impostorFade 8.7s ease-in-out forwards; 
+        }
+      }
+      &--close{
+        @include flexbox(row, flex-end, center);
+        background: #FFF;
+        padding: 5px;
+        border-radius: 50%;
+        animation: impostorFade 8.7s ease-in-out forwards; 
+      }
+    }
   }
+
 
   .modal-players{
     @include flexbox(column, flex-start, initial);
@@ -230,22 +299,4 @@ const toggleModal = () => {
     }
   }
 
-
-.user-list {
-  list-style: none;
-  padding: 0;
-  flex-direction: column;
-}
-
-.user-list li {
-  margin: 10px 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.eliminated {
-  text-decoration: line-through;
-  color: #ccc;
-}
 </style>
