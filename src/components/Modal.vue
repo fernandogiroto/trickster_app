@@ -6,11 +6,27 @@
           <div @click="toggleModal" class="modal-results--close">
             <IconX size="22" />
           </div>
+
+            
           <!-- WRONG IMPOSTOR -->
           <div class="modal-results__wrong-impostor">
             <div class="modal-results__wrong-impostor--title">
-              <span>FERNANDO</span>
-              <span>NAO ERA O IMPOSTOR</span>
+              <!-- A player has been eliminated. -->
+              <div v-if="userEliminated.username" class="modal-results__wrong-impostor--wrap">
+                <span>{{  userEliminated.username }}</span>
+                <span v-if="!isImpostor">NÃO ERA O IMPOSTOR</span>
+                <span v-if="isImpostor">ERA O IMPOSTOR</span>
+              </div>
+
+              <!-- No player has been eliminated. -->
+              <div v-if="!userEliminated.username" class="modal-results__wrong-impostor--wrap">
+                <span>Ninguém foi eliminado!</span>
+              </div>
+              
+              <!-- Game over and the impostor has won. -->
+              <div v-if="impostorWin" class="modal-results__wrong-impostor--wrap">
+                <span>O impostor venceu!</span>
+              </div>
             </div>
             <video autoplay muted playsinline class="modal-results__wrong-impostor--video"> 
               <source src="@/assets/videos/trickster_wrong.mp4" type="video/mp4">
@@ -19,21 +35,6 @@
               <source src="@/assets/audios/trickster_wrong.mp3" type="audio/mp3">
             </audio>
           </div>
-
-
-          <!-- <div v-if="userEliminated.username" class="has-eliminated">
-            <h3 v-if="!isImpostor">{{  userEliminated.username }} não é impostor...</h3>
-            <h3 v-if="isImpostor">{{ userEliminated.username }} é o impostor!</h3>
-          </div>
-          <div v-if="!userEliminated.username" class="no-eliminated">
-            <h3>Ninguém foi eliminado!</h3>
-          </div>
-          <div v-if="impostorWin">
-            {{  store.users.find(user => user.word === 'impostor').username }} era o impostor!
-            O impostor venceu!
-          </div> -->
-
-
         </div>
         <div class="modal-content top-to-bottom--effect" v-if="!showResult">
           <div class="modal-content__header">
@@ -269,6 +270,11 @@ const toggleModal = () => {
           z-index: 1000;
           color: #FFF;
           animation: impostorFade 8.7s ease-in-out forwards; 
+        }
+        &--wrap{
+          display: flex;
+          flex-direction: column;
+          align-items: center;
         }
       }
       &--close{
