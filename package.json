@@ -9,6 +9,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@capacitor/android": "^6.1.2",
+    "@capacitor/cli": "^6.1.2",
+    "@capacitor/core": "^6.1.2",
+    "@capacitor/ios": "^6.1.2",
     "@egjs/flicking-plugins": "^4.7.1",
     "@egjs/vue3-flicking": "^4.11.4",
     "@tabler/icons-vue": "^3.12.0",
