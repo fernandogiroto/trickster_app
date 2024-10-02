@@ -82,6 +82,9 @@ const activePlayers = computed(() => {
   return store.users.filter(user => !user.eliminated);
 });
 const currentUser = computed(() => {
+  if(!activePlayers.value[currentIndex.value]){
+    nextUser();
+  }
   return activePlayers.value[currentIndex.value] || null;
 });
 const playersNumber = computed(() => {
@@ -129,13 +132,6 @@ const moveToPanel = (index) => {
   }
   changePlayer.value.stop = true; 
 }
-
-const finalizeVoting = (eliminatedPlayer) => {
-  if (eliminatedPlayer) {
-    impostorDiscovered.value = true;
-  }
-};
-
 
 const restartGame = () => {
   router.push({

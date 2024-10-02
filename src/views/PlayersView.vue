@@ -10,7 +10,16 @@
     <div class="player-view__user" v-else>
       <span class="player-view__user--finished">Todos os utilizadores foram exibidos.</span>
       <Button background="button__dark text-uppercase" width="100%" height="50px" @click="goToGame">Começar o Jogo</Button>
-      <Button background="button-outline__dark text-uppercase" width="100%" height="50px" fontSize="13px" @click="refreshGame">Sortear Novamente</Button>
+      <Button 
+        background="button-outline__dark text-uppercase refresh-button" 
+        width="100%" 
+        height="50px" 
+        fontSize="13px" 
+        :disabled="isDisabled"
+        @click="refreshGame"
+        >
+        Sortear Novamente
+      </Button>
     </div>
     <div class="return-button bottom-to-top--effect" v-if="returnPage">
      <IconArrowLeft size="20" @click="backHome" />
@@ -20,7 +29,7 @@
 
 <script setup>
 
-    import {onMounted, computed, ref} from 'vue';
+    import {onMounted, computed, ref, watch} from 'vue';
     import { IconArrowLeft } from '@tabler/icons-vue';
     import { useGameStore } from '@/stores/game';
     import Button from '@/components/Button.vue';
@@ -36,6 +45,7 @@
     const currentUser = computed(() => store.users[currentIndex.value]);
     const lastIndex = ref([]);
     const returnPage = ref(false);
+    const isDisabled = ref(true);
 
     const getRandomIndexExcludingLast = () => {
       let randomIndex;
@@ -72,6 +82,7 @@
         store.updateUserWord(words[randomIndex]); 
         showWord.value = false;
         store.users.forEach(user => user.eliminated = false);
+        isDisabled.value = true;
     };
 
     onMounted(() => {
@@ -83,6 +94,15 @@
 
       if (route.query.refresh === 'true') {
         refreshGame();
+      }
+    })
+
+    watch(currentUser, (newVal) => {
+      if(!newVal) {
+        console.log(newVal)
+        setTimeout(() => {
+          isDisabled.value = false;
+        }, 3000)
       }
     })
 
@@ -135,6 +155,10 @@
   .hidden {
     visibility: hidden;
   }
+
+  .refresh-button:disabled {
+    opacity: 0.5;
+  } 
 
 </style>
   
