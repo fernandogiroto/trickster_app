@@ -3,7 +3,7 @@
   <div class="player-view"  :style="{ backgroundColor: currentUser ? currentUser.color : '#c1c1c1' }">
     <div class="player-view__user" v-if="currentUser">
       <span class="player-view__user--player">{{ currentUser.username }}</span>
-      <span class="player-view__user--current-word top-to-bottom--effect" v-if="showWord">{{ currentUser.word }}</span>
+      <span :class="['player-view__user--current-word', 'top-to-bottom--effect', {hidden: !showWord}]">{{ currentUser.word }}</span>
       <Button background="button__dark text-uppercase" width="100%" height="50px" @click="showWord = true"  v-if="!showWord">MOSTRAR PALAVRA</Button>
       <Button background="button-outline__dark text-uppercase" width="100%" height="50px" fontSize="13px" v-if="showWord" @click="nextUser">Esconder Palavra e Passar</button>
     </div>
@@ -130,6 +130,10 @@
     position: absolute;
     top: 30px;
     left: 30px;
+  }
+
+  .hidden {
+    visibility: hidden;
   }
 
 </style>
